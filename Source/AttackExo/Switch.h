@@ -27,11 +27,13 @@ public:
 	FORCEINLINE TArray<AFollowSwitchCharacter*> GetCharacterGroup() { return characterGroup; }
 	FORCEINLINE float CharacterGroupNum() { return characterGroup.Num(); }
 	FORCEINLINE void AddCharacterGroup(AFollowSwitchCharacter* _value) { characterGroup.Add(_value); }
+	UFUNCTION() void UnRegister(AFollowSwitchCharacter* _character);
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	void Posses();
-	void UnPosses();
+	void SwitchPossession();
+	void Possess();
+	void UnPossess(AFollowSwitchCharacter* _character);
 	void IncrementSwitch();
 	UFUNCTION() void Switch();
 	void Init();
