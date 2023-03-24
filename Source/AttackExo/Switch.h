@@ -11,7 +11,7 @@ UCLASS()
 class ATTACKEXO_API ASwitch : public AActor
 {
 	GENERATED_BODY()
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 		TArray<AFollowSwitchCharacter*> characterGroup;
 	UPROPERTY()
 		TObjectPtr<AFollowSwitchCharacter> currentChar = nullptr;

@@ -10,7 +10,7 @@ class ATTACKEXO_API ASpawn : public AActor
 {
 	GENERATED_BODY()
 		UPROPERTY(EditAnywhere)
-		TSubclassOf<class AFollowSwitchCharacter> character_BP = nullptr;
+		TSubclassOf<AActor> actor_BP = nullptr;
 	UPROPERTY(EditAnywhere)
 		bool useDrawDebug = true;
 	UPROPERTY(EditAnywhere)
@@ -23,9 +23,9 @@ class ATTACKEXO_API ASpawn : public AActor
 	UPROPERTY(EditAnywhere)
 		float spawnTimer = 5;
 	UPROPERTY()
-		float nbCharacter = 0;
+		int nbCharacter = 0;
 	UPROPERTY(EditAnywhere, meta = (UIMin = 1, ClampMin = 1, UIMax = 10, ClampMax = 10))
-		float nbCharacterMax = 4;
+		int nbCharacterMax = 4;
 public:
 	ASpawn();
 	FORCEINLINE float GetnbCharacter() { return nbCharacter; }

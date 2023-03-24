@@ -18,18 +18,39 @@ void ASpawn::BeginPlay()
 
 void ASpawn::SpawnActor()
 {
-	
-	if (memberList->CharacterGroupNum() < nbCharacterMax)
+	if (memberList)
+		nbCharacter = memberList->CharacterGroupNum();
+
+
+	if (nbCharacter < nbCharacterMax)
 	{
 		if (setSpawnPoint == nullptr)
 		{
-			AFollowSwitchCharacter* _character = GetWorld()->SpawnActor<AFollowSwitchCharacter>(character_BP, GetActorLocation(), FRotator::ZeroRotator);
-			memberList->AddCharacterGroup(_character);
+			AActor* _actor = GetWorld()->SpawnActor<AActor>(actor_BP, GetActorLocation(), FRotator::ZeroRotator);
+
+			if (memberList)
+			{
+				AFollowSwitchCharacter* _character = Cast<AFollowSwitchCharacter>(_actor);
+
+				if (_character)
+					memberList->AddCharacterGroup(_character);
+			}
+			else
+				nbCharacter++;
 		}
 		else
 		{
-			AFollowSwitchCharacter* _character = GetWorld()->SpawnActor<AFollowSwitchCharacter>(character_BP, setSpawnPoint->GetActorLocation(), FRotator::ZeroRotator);
-			memberList->AddCharacterGroup(_character);
+			AActor* _actor = GetWorld()->SpawnActor<AActor>(actor_BP, setSpawnPoint->GetActorLocation(), FRotator::ZeroRotator);
+
+			if (memberList)
+			{
+				AFollowSwitchCharacter* _character = Cast<AFollowSwitchCharacter>(_actor);
+
+				if (_character)
+					memberList->AddCharacterGroup(_character);
+			}
+			else
+				nbCharacter++;
 		}
 	}
 }
@@ -45,7 +66,7 @@ void ASpawn::TimerSpawn(float _timer)
 {
 
 	timer += GetWorld()->DeltaTimeSeconds;
-	if (timer >= _timer && memberList->CharacterGroupNum() < nbCharacterMax)
+	if (timer >= _timer && nbCharacter < nbCharacterMax)
 	{
 		SpawnActor();
 		timer = 0;
@@ -62,4 +83,3 @@ void ASpawn::DrawDebug()
 		return;
 	DrawDebugLine(GetWorld(), GetActorLocation(), setSpawnPoint->GetActorLocation(), FColor::Red, false, -1, 0, 0);
 }
-
