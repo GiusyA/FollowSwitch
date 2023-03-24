@@ -21,7 +21,7 @@ void AFollowSwitchCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FPC->SetViewTarget(this);
+	//FPC->SetViewTarget(this);
 }
 
 void AFollowSwitchCharacter::Tick(float DeltaTime)
