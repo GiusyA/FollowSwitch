@@ -13,6 +13,7 @@ void UPathComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ownerStartLocation = OWNER->GetActorLocation();
 	InitPaths(); //temporaire parce que c'est chiant quand ça casse
 	InitChosenPathIndex();
 }
@@ -31,8 +32,7 @@ void UPathComponent::DrawDebugChosenPath()
 	if (paths.IsEmpty())
 		return;
 
-	const FVector _ownerLocation = OWNER->GetActorLocation();
-	const FVector _ownerXY = FVector(_ownerLocation.X, _ownerLocation.Y, 0);
+	const FVector _ownerXY = FVector(ownerStartLocation.X, ownerStartLocation.Y, 0);
 
 	DRAW_SPHERE(_ownerXY, 10, 5, FColor::Red, 2);
 	TArray<FVector> _nodes = paths[chosenPathIndex].nodes;
@@ -40,12 +40,12 @@ void UPathComponent::DrawDebugChosenPath()
 	for (size_t i = 0; i < _nodes.Num(); i++)
 	{
 		if (i == 0)
-			DRAW_LINE(_ownerXY, _nodes[i] - FVector(0, 0, _ownerLocation.Z), FColor::Red, 2);
+			DRAW_LINE(_ownerXY, _nodes[i] - FVector(0, 0, ownerStartLocation.Z), FColor::Yellow, 2);
 
 		if (i != (_nodes.Num() - 1))
-			DRAW_LINE(_nodes[i] - FVector(0, 0, _ownerLocation.Z), _nodes[i + 1] - FVector(0, 0, _ownerLocation.Z), FColor::Red, 2);
+			DRAW_LINE(_nodes[i] - FVector(0, 0, ownerStartLocation.Z), _nodes[i + 1] - FVector(0, 0, ownerStartLocation.Z), FColor::Yellow, 2);
 
-		DRAW_SPHERE(_nodes[i] - FVector(0, 0, _ownerLocation.Z), 10, 5, FColor::Red, 2);
+		DRAW_SPHERE(_nodes[i] - FVector(0, 0, ownerStartLocation.Z), 10, 5, FColor::Yellow, 2);
 	}
 }
 

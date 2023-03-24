@@ -13,6 +13,9 @@ class ATTACKEXO_API AFollowSwitchCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEndPath);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveForward, float, _axis);
+
 	UPROPERTY(EditAnywhere)
 		TObjectPtr<USpringArmComponent> springArm = nullptr;
 
@@ -22,11 +25,17 @@ class ATTACKEXO_API AFollowSwitchCharacter : public ACharacter
 	UPROPERTY(EditAnywhere)
 		TObjectPtr<UPathComponent> pathComponent = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess))
 		bool isPawn = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess))
 		float speed = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintCallable, BlueprintAssignable, meta = (AllowPrivateAccess))
+		FOnEndPath onEndPath;
+
+	UPROPERTY(EditAnywhere, BlueprintCallable, BlueprintAssignable, meta = (AllowPrivateAccess))
+		FOnMoveForward onMoveForward;
 
 #pragma region UE_METHODS
 public:
@@ -42,6 +51,26 @@ public:
 
 #pragma region CUSTOM_METHODS
 private:
+	UFUNCTION(BlueprintCallable) void DestroyItself();
 	void FollowCurrentPath();
+	UFUNCTION(BlueprintCallable) bool IsAtRange(const FVector& _location);
+	void MoveForward(float _axis);
+	void RotateYaw(float _axis);
+
+public:
+	void Possess(); //TODO dans l'idéal à mettre dans le switcher grâce au getter en dessous
+	void UnPossess();
+	FORCEINLINE void SetIsPawn(const bool& _value)
+	{
+		isPawn = _value;
+	}
+	FORCEINLINE FOnEndPath& OnEndPath()
+	{
+		return onEndPath;
+	}
+	FORCEINLINE FOnMoveForward& OnMoveForward()
+	{
+		return onMoveForward;
+	}
 #pragma endregion CUSTOM_METHODS
 };

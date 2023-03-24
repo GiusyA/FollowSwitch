@@ -25,6 +25,7 @@ class ATTACKEXO_API UPathComponent : public UActorComponent
 		TArray<FPathNodes> paths;
 
 	int chosenPathIndex = 0;
+	FVector ownerStartLocation = FVector(0);
 
 #pragma region UE_METHODS
 public:	
@@ -44,6 +45,10 @@ private:
 	void InitPaths();
 
 public:
+	FORCEINLINE void SetCurrentNode(const int& _value)
+	{
+		paths[chosenPathIndex].currentNode = _value;
+	}
 	FORCEINLINE FPathNodes GetChosenPath() const
 	{
 		return paths[chosenPathIndex];
