@@ -31,8 +31,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	void Posses();
-	void UnPosses();
+	void UnPosses(AFollowSwitchCharacter* _character);
 	void IncrementSwitch();
 	UFUNCTION() void Switch();
+	void SwitchPossession();
 	void Init();
 };

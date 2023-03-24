@@ -20,3 +20,4 @@
 #define FORWARD "FORWARD"
 #define ROTATION "ROTATION"
 #define POSSESS "POSSESS"
+#define SWITCH "SWITCH"

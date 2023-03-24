@@ -14,7 +14,7 @@ class ATTACKEXO_API UFollowSwitchAnimInst : public UAnimInstance
 		float velocity = 1.0f;
 
 private:
-	void SetVelocity(float _velocity);
+	UFUNCTION() void SetVelocity(float _velocity);
 
 	virtual void NativeBeginPlay() override;
 };
