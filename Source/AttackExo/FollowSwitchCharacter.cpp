@@ -25,13 +25,12 @@ void AFollowSwitchCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	onEndPath.AddDynamic(this, &AFollowSwitchCharacter::DestroyItself);
 }
 
 void AFollowSwitchCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	DestroyItself(this);
 	FollowCurrentPath();
 }
 
@@ -45,10 +44,10 @@ void AFollowSwitchCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 #pragma endregion UE_METHODS
 
 #pragma region CUSTOM_METHODS
-void AFollowSwitchCharacter::DestroyItself()
+void AFollowSwitchCharacter::DestroyItself(AFollowSwitchCharacter* _character)
 {
-	//TODO unregister du switcher
-
+	if (!canBeDestroy)
+		return;
 	Destroy();
 }
 
@@ -66,7 +65,7 @@ void AFollowSwitchCharacter::FollowCurrentPath()
 
 		if (_path.currentNode == _nodes.Num())
 		{
-			onEndPath.Broadcast();
+			onEndPath.Broadcast(this);
 			return;
 		}
 
