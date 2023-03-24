@@ -40,12 +40,12 @@ void UPathComponent::DrawDebugChosenPath()
 	for (size_t i = 0; i < _nodes.Num(); i++)
 	{
 		if (i == 0)
-			DRAW_LINE(_ownerXY, _nodes[i], FColor::Red, 2);
+			DRAW_LINE(_ownerXY, _nodes[i] - FVector(0, 0, _ownerLocation.Z), FColor::Red, 2);
 
 		if (i != (_nodes.Num() - 1))
-			DRAW_LINE(_nodes[i], _nodes[i + 1], FColor::Red, 2);
+			DRAW_LINE(_nodes[i] - FVector(0, 0, _ownerLocation.Z), _nodes[i + 1] - FVector(0, 0, _ownerLocation.Z), FColor::Red, 2);
 
-		DRAW_SPHERE(_nodes[i], 10, 5, FColor::Red, 2);
+		DRAW_SPHERE(_nodes[i] - FVector(0, 0, _ownerLocation.Z), 10, 5, FColor::Red, 2);
 	}
 }
 
@@ -56,14 +56,15 @@ void UPathComponent::InitChosenPathIndex()
 		chosenPathIndex = FMath::RandRange(0, paths.Num() - 1);
 
 		const FVector _ownerLocation = OWNER->GetActorLocation();
-		const FVector _ownerXY = FVector(_ownerLocation.X, _ownerLocation.Y, 0);
 
 		for (size_t i = 0; i < paths.Num(); i++)
 		{
 			TArray<FVector> _nodes = paths[i].nodes;
 
 			for (size_t y = 0; y < _nodes.Num(); y++)
-				_nodes[y] = _ownerXY + _nodes[y];
+			{
+				paths[i].nodes[y] = _ownerLocation + _nodes[y];
+			}
 		}
 	}
 }
