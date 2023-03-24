@@ -11,14 +11,19 @@ UCLASS()
 class ATTACKEXO_API ASwitch : public AActor
 {
 	GENERATED_BODY()
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIncrement);
 	UPROPERTY(VisibleAnywhere)
 		TArray<AFollowSwitchCharacter*> characterGroup;
 	UPROPERTY()
 		TObjectPtr<AFollowSwitchCharacter> currentChar = nullptr;
 	UPROPERTY()
 		TObjectPtr<AController> fpc = nullptr;
+	UPROPERTY()
+		int charIndex = 0;
+	FOnIncrement onIncrement;
 public:	
 	ASwitch();
+	FORCEINLINE FOnIncrement& OnIncrement() { return onIncrement; }
 	FORCEINLINE TArray<AFollowSwitchCharacter*> GetCharacterGroup() { return characterGroup; }
 	FORCEINLINE float CharacterGroupNum() { return characterGroup.Num(); }
 	FORCEINLINE void AddCharacterGroup(AFollowSwitchCharacter* _value) { characterGroup.Add(_value); }
@@ -27,6 +32,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 	void Posses();
 	void UnPosses();
-	void Switch();
+	void IncrementSwitch();
+	UFUNCTION() void Switch();
 	void Init();
 };
