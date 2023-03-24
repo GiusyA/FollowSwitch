@@ -13,12 +13,9 @@ ASwitch::ASwitch()
 
 void ASwitch::UnRegister(AFollowSwitchCharacter* _character)
 {
-	UE_LOG(LogTemp, Warning, TEXT("character"))
 	if (!_character)
 		return;
-	UE_LOG(LogTemp, Warning, TEXT("character IF"))
 	characterGroup.Remove(_character);
-	_character->SetCanBeDestroy(true);
 }
 
 void ASwitch::BeginPlay()
@@ -31,6 +28,13 @@ void ASwitch::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (onCamera)
+	{
+		if (!camera)
+			return;
+
+		FPC->SetViewTarget(camera);
+	}
 }
 
 void ASwitch::SwitchPossession()
@@ -38,7 +42,7 @@ void ASwitch::SwitchPossession()
 
 	AFollowSwitchCharacter* _pawn = Cast<AFollowSwitchCharacter>(PAWN);
 
-	if (_pawn == characterGroup[charIndex])
+	if (_pawn == currentChar)
 	{
 		UnPossess(_pawn);
 	}
@@ -50,19 +54,23 @@ void ASwitch::SwitchPossession()
 
 void ASwitch::Possess()
 {
-	AFollowSwitchCharacter* _character = Cast<AFollowSwitchCharacter>(FPC->GetViewTarget());
-	if (_character == characterGroup[charIndex])
-	{
-		FPC->Possess(_character);
-		_character->SetIsPawn(true);
-	}
-
+	FPC->Possess(currentChar);
+	currentChar->SetIsPawn(true);
 }
 
 void ASwitch::UnPossess(AFollowSwitchCharacter* _character)
 {
 	FPC->UnPossess();
 	_character->SetIsPawn(false);
+	onCamera = true;
+}
+
+void ASwitch::DecrementSwitch()
+{
+	charIndex--;
+	if (charIndex < 0)
+		charIndex = CharacterGroupNum() - 1;
+	onDecrement.Broadcast();
 }
 
 void ASwitch::IncrementSwitch()
@@ -75,11 +83,15 @@ void ASwitch::IncrementSwitch()
 
 void ASwitch::Switch()
 {
+	onCamera = false;
+
 	if (!GetWorld()->GetFirstPlayerController() || characterGroup.Num() == 0)
 		return;
 	AFollowSwitchCharacter* _nextCharacter = characterGroup[charIndex];
+
 	if (!_nextCharacter)
 		return;
+	currentChar = !currentChar ? characterGroup[0] : currentChar;
 	GetWorld()->GetFirstPlayerController()->SetViewTarget(currentChar);
 	currentChar = _nextCharacter;
 	
@@ -88,9 +100,10 @@ void ASwitch::Switch()
 void ASwitch::Init()
 {
 	onIncrement.AddDynamic(this, &ASwitch::Switch);
+	onDecrement.AddDynamic(this, &ASwitch::Switch);
 	if (!GetWorld()->GetFirstPlayerController())
 		return;
 	GetWorld()->GetFirstPlayerController()->InputComponent->BindAction(POSSESS, IE_Pressed, this, &ASwitch::SwitchPossession);
-	GetWorld()->GetFirstPlayerController()->InputComponent->BindAction("Switch", IE_Pressed, this, &ASwitch::IncrementSwitch);
-	Switch();
+	GetWorld()->GetFirstPlayerController()->InputComponent->BindAction(SWITCH_UP, IE_Pressed, this, &ASwitch::IncrementSwitch);
+	GetWorld()->GetFirstPlayerController()->InputComponent->BindAction(SWITCH_DOWN, IE_Pressed, this, &ASwitch::DecrementSwitch);
 }

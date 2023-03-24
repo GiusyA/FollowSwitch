@@ -12,6 +12,11 @@ class ATTACKEXO_API ASwitch : public AActor
 {
 	GENERATED_BODY()
 		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIncrement);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDecrement);
+
+	UPROPERTY(EditAnywhere)
+		TObjectPtr<AActor> camera = nullptr;
+
 	UPROPERTY(VisibleAnywhere)
 		TArray<AFollowSwitchCharacter*> characterGroup;
 	UPROPERTY()
@@ -20,7 +25,11 @@ class ATTACKEXO_API ASwitch : public AActor
 		TObjectPtr<AController> fpc = nullptr;
 	UPROPERTY()
 		int charIndex = 0;
+
+	bool onCamera = true;
+	TObjectPtr<AActor> viewTarget = nullptr;
 	FOnIncrement onIncrement;
+	FOnDecrement onDecrement;
 public:	
 	ASwitch();
 	FORCEINLINE FOnIncrement& OnIncrement() { return onIncrement; }
@@ -34,6 +43,7 @@ protected:
 	void SwitchPossession();
 	void Possess();
 	void UnPossess(AFollowSwitchCharacter* _character);
+	void DecrementSwitch();
 	void IncrementSwitch();
 	UFUNCTION() void Switch();
 	void Init();

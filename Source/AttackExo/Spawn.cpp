@@ -35,7 +35,10 @@ void ASpawn::SpawnActor()
 				AFollowSwitchCharacter* _character = Cast<AFollowSwitchCharacter>(_actor);
 
 				if (_character)
+				{
 					memberList->AddCharacterGroup(_character);
+					_character->OnEndPath().AddDynamic(memberList.Get(), &ASwitch::UnRegister);
+				}
 			}
 			else
 				nbCharacter++;

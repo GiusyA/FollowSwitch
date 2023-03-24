@@ -25,12 +25,12 @@ void AFollowSwitchCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	onEndPath.AddDynamic(this, &AFollowSwitchCharacter::DestroyItself);
 }
 
 void AFollowSwitchCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	DestroyItself(this);
 	FollowCurrentPath();
 }
 
@@ -46,8 +46,6 @@ void AFollowSwitchCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 #pragma region CUSTOM_METHODS
 void AFollowSwitchCharacter::DestroyItself(AFollowSwitchCharacter* _character)
 {
-	if (!canBeDestroy)
-		return;
 	Destroy();
 }
 
@@ -91,17 +89,5 @@ void AFollowSwitchCharacter::MoveForward(float _axis)
 void AFollowSwitchCharacter::RotateYaw(float _axis)
 {
 	AddControllerYawInput(_axis * DELTATIME * (speed / 4.0f));
-}
-
-void AFollowSwitchCharacter::Possess()
-{
-	isPawn = true;
-	FPC->Possess(this);
-}
-
-void AFollowSwitchCharacter::UnPossess()
-{
-	isPawn = false;
-	FPC->UnPossess();
 }
 #pragma endregion CUSTOM_METHODS

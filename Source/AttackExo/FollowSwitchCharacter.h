@@ -16,8 +16,6 @@ class ATTACKEXO_API AFollowSwitchCharacter : public ACharacter
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndPath, AFollowSwitchCharacter*, _character);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveForward, float, _axis);
 
-	UPROPERTY()
-		bool canBeDestroy = false;
 	UPROPERTY(EditAnywhere)
 		TObjectPtr<USpringArmComponent> springArm = nullptr;
 
@@ -60,9 +58,6 @@ private:
 	void RotateYaw(float _axis);
 
 public:
-	void Possess(); //TODO dans l'idéal à mettre dans le switcher grâce au getter en dessous
-	void UnPossess();
-	FORCEINLINE void SetCanBeDestroy(bool _value) { canBeDestroy = _value; }
 	FORCEINLINE void SetIsPawn(const bool& _value)
 	{
 		isPawn = _value;
