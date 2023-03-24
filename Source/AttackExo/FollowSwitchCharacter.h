@@ -14,6 +14,7 @@ class ATTACKEXO_API AFollowSwitchCharacter : public ACharacter
 	GENERATED_BODY()
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEndPath);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveForward, float, _axis);
 
 	UPROPERTY(EditAnywhere)
 		TObjectPtr<USpringArmComponent> springArm = nullptr;
@@ -32,6 +33,9 @@ class ATTACKEXO_API AFollowSwitchCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintCallable, BlueprintAssignable, meta = (AllowPrivateAccess))
 		FOnEndPath onEndPath;
+
+	UPROPERTY(EditAnywhere, BlueprintCallable, BlueprintAssignable, meta = (AllowPrivateAccess))
+		FOnMoveForward onMoveForward;
 
 #pragma region UE_METHODS
 public:
@@ -63,6 +67,10 @@ public:
 	FORCEINLINE FOnEndPath& OnEndPath()
 	{
 		return onEndPath;
+	}
+	FORCEINLINE FOnMoveForward& OnMoveForward()
+	{
+		return onMoveForward;
 	}
 #pragma endregion CUSTOM_METHODS
 };

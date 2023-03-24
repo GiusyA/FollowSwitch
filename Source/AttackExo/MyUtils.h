@@ -13,6 +13,7 @@
 
 #define DRAW_SPHERE(location, radius, segments, color, thickness) DrawDebugSphere(GetWorld(), location, radius, segments, color, false, -1.0f, 0, thickness)
 #define DRAW_LINE(start, end, color, thickness) DrawDebugLine(GetWorld(), start, end, color, false, -1.0f, 0, thickness)
+#define DRAW_BOX(location, extent, color, thickness) DrawDebugBox(GetWorld(), location, extent, color, false, -1.0f, 0, thickness)
 
 #define LERP(from, to, t) FMath::Lerp(from, to, t)
 

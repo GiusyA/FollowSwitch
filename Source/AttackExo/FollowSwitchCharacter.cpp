@@ -59,6 +59,8 @@ void AFollowSwitchCharacter::FollowCurrentPath()
 
 	if (!isPawn)
 	{
+		onMoveForward.Broadcast(1);
+
 		FPathNodes _path = pathComponent->GetChosenPath();
 		TArray<FVector> _nodes = _path.nodes;
 
@@ -84,6 +86,7 @@ bool AFollowSwitchCharacter::IsAtRange(const FVector& _location)
 void AFollowSwitchCharacter::MoveForward(float _axis)
 {
 	AddMovementInput(GetActorForwardVector(), _axis * DELTATIME * (speed / 4.0f));
+	onMoveForward.Broadcast(_axis);
 }
 
 void AFollowSwitchCharacter::RotateYaw(float _axis)

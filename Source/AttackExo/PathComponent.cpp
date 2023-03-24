@@ -40,12 +40,12 @@ void UPathComponent::DrawDebugChosenPath()
 	for (size_t i = 0; i < _nodes.Num(); i++)
 	{
 		if (i == 0)
-			DRAW_LINE(_ownerXY, _nodes[i] - FVector(0, 0, ownerStartLocation.Z), FColor::Red, 2);
+			DRAW_LINE(_ownerXY, _nodes[i] - FVector(0, 0, ownerStartLocation.Z), FColor::Yellow, 2);
 
 		if (i != (_nodes.Num() - 1))
-			DRAW_LINE(_nodes[i] - FVector(0, 0, ownerStartLocation.Z), _nodes[i + 1] - FVector(0, 0, ownerStartLocation.Z), FColor::Red, 2);
+			DRAW_LINE(_nodes[i] - FVector(0, 0, ownerStartLocation.Z), _nodes[i + 1] - FVector(0, 0, ownerStartLocation.Z), FColor::Yellow, 2);
 
-		DRAW_SPHERE(_nodes[i] - FVector(0, 0, ownerStartLocation.Z), 10, 5, FColor::Red, 2);
+		DRAW_SPHERE(_nodes[i] - FVector(0, 0, ownerStartLocation.Z), 10, 5, FColor::Yellow, 2);
 	}
 }
 
