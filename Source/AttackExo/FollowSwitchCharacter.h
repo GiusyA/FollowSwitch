@@ -24,7 +24,7 @@ class ATTACKEXO_API AFollowSwitchCharacter : public ACharacter
 	UPROPERTY(EditAnywhere)
 		TObjectPtr<UPathComponent> pathComponent = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess))
 		bool isPawn = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess))
@@ -32,9 +32,6 @@ class ATTACKEXO_API AFollowSwitchCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintCallable, BlueprintAssignable, meta = (AllowPrivateAccess))
 		FOnEndPath onEndPath;
-
-	bool wasPossessed = false;
-	FVector positionOnPossess = FVector(0);
 
 #pragma region UE_METHODS
 public:
@@ -54,12 +51,15 @@ private:
 	void FollowCurrentPath();
 	UFUNCTION(BlueprintCallable) bool IsAtRange(const FVector& _location);
 	void MoveForward(float _axis);
-	void ReturnToPositionOnPossess();
 	void RotateYaw(float _axis);
 
 public:
-	void Possess();
+	void Possess(); //TODO dans l'idéal à mettre dans le switcher grâce au getter en dessous
 	void UnPossess();
+	FORCEINLINE void SetIsPawn(const bool& _value)
+	{
+		isPawn = _value;
+	}
 	FORCEINLINE FOnEndPath& OnEndPath()
 	{
 		return onEndPath;

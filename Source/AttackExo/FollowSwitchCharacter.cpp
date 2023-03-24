@@ -2,6 +2,7 @@
 #include "FollowSwitchCharacter.h"
 #include "MyUtils.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #pragma region UE_METHODS
 AFollowSwitchCharacter::AFollowSwitchCharacter()
@@ -24,7 +25,6 @@ void AFollowSwitchCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Possess();
 	onEndPath.AddDynamic(this, &AFollowSwitchCharacter::DestroyItself);
 }
 
@@ -47,14 +47,15 @@ void AFollowSwitchCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 #pragma region CUSTOM_METHODS
 void AFollowSwitchCharacter::DestroyItself()
 {
-	//unregister du switcher
+	//TODO unregister du switcher
 
 	Destroy();
 }
 
 void AFollowSwitchCharacter::FollowCurrentPath()
 {
-	ReturnToPositionOnPossess();
+	if (!pathComponent)
+		return;
 
 	if (!isPawn)
 	{
@@ -68,6 +69,7 @@ void AFollowSwitchCharacter::FollowCurrentPath()
 		}
 
 		SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), _nodes[_path.currentNode], DELTATIME, speed));
+		SetActorRotation(FMath::Lerp(GetActorRotation(), UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), _nodes[_path.currentNode]), DELTATIME));
 
 		if (IsAtRange(_nodes[_path.currentNode]))
 			pathComponent->SetCurrentNode(_path.currentNode + 1);
@@ -84,20 +86,6 @@ void AFollowSwitchCharacter::MoveForward(float _axis)
 	AddMovementInput(GetActorForwardVector(), _axis * DELTATIME * (speed / 4.0f));
 }
 
-void AFollowSwitchCharacter::ReturnToPositionOnPossess()
-{
-	if (wasPossessed)
-	{
-		SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), positionOnPossess, DELTATIME, speed));
-
-		if (IsAtRange(positionOnPossess))
-		{
-			isPawn = false;
-			wasPossessed = false;
-		}
-	}
-}
-
 void AFollowSwitchCharacter::RotateYaw(float _axis)
 {
 	AddControllerYawInput(_axis * DELTATIME * (speed / 4.0f));
@@ -105,14 +93,13 @@ void AFollowSwitchCharacter::RotateYaw(float _axis)
 
 void AFollowSwitchCharacter::Possess()
 {
-	positionOnPossess = GetActorLocation();
 	isPawn = true;
 	FPC->Possess(this);
 }
 
 void AFollowSwitchCharacter::UnPossess()
 {
-	wasPossessed = true;
+	isPawn = false;
 	FPC->UnPossess();
 }
 #pragma endregion CUSTOM_METHODS
