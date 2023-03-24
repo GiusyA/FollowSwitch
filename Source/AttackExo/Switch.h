@@ -23,7 +23,7 @@ class ATTACKEXO_API ASwitch : public AActor
 		TObjectPtr<AFollowSwitchCharacter> currentChar = nullptr;
 	UPROPERTY()
 		TObjectPtr<AController> fpc = nullptr;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 		int charIndex = 0;
 
 	bool onCamera = true;

@@ -20,9 +20,6 @@ void ASpawn::BeginPlay()
 
 void ASpawn::SpawnActor()
 {
-	if (memberList)
-		nbCharacter = memberList->CharacterGroupNum();
-
 
 	if (nbCharacter < nbCharacterMax)
 	{
@@ -67,6 +64,8 @@ void ASpawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	DrawDebug();
+	if (memberList)
+		nbCharacter = memberList->CharacterGroupNum();
 	TimerSpawn(spawnTimer);
 }
 
